@@ -13,7 +13,7 @@ export async function generateStaticParams() {
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
   
@@ -22,6 +22,7 @@ export async function PUT(
   }
 
   try {
+    const params = await context.params;
     const body = await request.json();
     const testimonial = await prisma.testimonial.update({
       where: { id: params.id },
@@ -35,7 +36,7 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const session = await getServerSession(authOptions);
   
@@ -44,6 +45,7 @@ export async function DELETE(
   }
 
   try {
+    const params = await context.params;
     await prisma.testimonial.delete({
       where: { id: params.id },
     });

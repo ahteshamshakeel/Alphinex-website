@@ -14,9 +14,10 @@ export async function generateStaticParams() {
 // GET single blog by ID or slug
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const session = await getServerSession(authOptions);
     const blog = await prisma.blog.findFirst({
       where: {
@@ -42,9 +43,10 @@ export async function GET(
 // PUT update blog (admin only)
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const session = await getServerSession(authOptions);
     
     if (!session) {
@@ -88,9 +90,10 @@ export async function PUT(
 // DELETE blog (admin only)
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const session = await getServerSession(authOptions);
     
     if (!session) {

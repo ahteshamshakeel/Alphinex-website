@@ -12,9 +12,10 @@ export async function generateStaticParams() {
 // GET single project
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const project = await prisma.project.findUnique({
       where: { id: params.id },
     });
@@ -33,9 +34,10 @@ export async function GET(
 // PUT update project
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     const body = await request.json();
     const project = await prisma.project.update({
       where: { id: params.id },
@@ -51,9 +53,10 @@ export async function PUT(
 // DELETE project
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
+    const params = await context.params;
     await prisma.project.delete({
       where: { id: params.id },
     });
