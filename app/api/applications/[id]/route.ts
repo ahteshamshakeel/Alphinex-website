@@ -9,34 +9,38 @@ import { authOptions } from '@/lib/auth';
 
 export async function PUT(
   request: Request,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const params = await context.params;
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const data = await request.json();
+
     const application = await prisma.application.update({
       where: { id: params.id },
       data: {
         status: data.status,
       },
     });
+
     return NextResponse.json(application);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to update application' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to update application' },
+      { status: 500 }
+    );
   }
 }
 
+
 export async function DELETE(
   request: Request,
-  context: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const params = await context.params;
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -45,8 +49,13 @@ export async function DELETE(
     await prisma.application.delete({
       where: { id: params.id },
     });
+
     return NextResponse.json({ success: true });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to delete application' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to delete application' },
+      { status: 500 }
+    );
   }
 }
+
