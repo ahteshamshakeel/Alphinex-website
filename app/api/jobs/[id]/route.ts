@@ -1,15 +1,11 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+export const revalidate = 0;
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-
-// Prevent static generation
-export async function generateStaticParams() {
-  return [];
-}
 
 export async function PUT(
   request: Request,

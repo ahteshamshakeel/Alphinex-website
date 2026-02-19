@@ -8,9 +8,13 @@ const nextConfig = {
       bodySizeLimit: '10mb',
     },
   },
-  // Skip static page generation for API routes
-  skipTrailingSlashRedirect: true,
-  skipMiddlewareUrlNormalize: true,
+  // Explicitly tell Next.js not to try to statically analyze API routes
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
 };
 
 module.exports = nextConfig;

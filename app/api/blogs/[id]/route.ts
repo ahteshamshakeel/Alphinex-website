@@ -1,15 +1,11 @@
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
+export const revalidate = 0;
 
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-
-// Prevent static generation
-export async function generateStaticParams() {
-  return [];
-}
 
 // GET single blog by ID or slug
 export async function GET(
