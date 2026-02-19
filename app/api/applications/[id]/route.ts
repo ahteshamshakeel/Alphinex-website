@@ -3,17 +3,22 @@ export const runtime = 'nodejs';
 export const revalidate = 0;
 
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+
 
 export async function PUT(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const { prisma } = await import('@/lib/prisma');
+    const [{ prisma }, { authOptions }, { getServerSession }] =
+      await Promise.all([
+        import('@/lib/prisma'),
+        import('@/lib/auth'),
+        import('next-auth'),
+      ]);
 
     const session = await getServerSession(authOptions);
+
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
@@ -41,14 +46,17 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const { prisma } = await import('@/lib/prisma');
+    const [{ prisma }, { authOptions }, { getServerSession }] =
+      await Promise.all([
+        import('@/lib/prisma'),
+        import('@/lib/auth'),
+        import('next-auth'),
+      ]);
 
     const session = await getServerSession(authOptions);
+
     if (!session) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     await prisma.application.delete({
@@ -63,5 +71,6 @@ export async function DELETE(
     );
   }
 }
+
 
 
